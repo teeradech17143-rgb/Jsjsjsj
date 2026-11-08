@@ -1,0 +1,1725 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>คลังสคริปต์</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Kanit:wght@400;500;600&family=Noto+Sans+Thai:wght@400;500&display=swap">
+<style>
+  /* Layout: sign-up / login card gates a single centered column of searchable script cards. Dark-only by design. */
+  :root {
+    --bg: #0b0912;
+    --surface: #14111f;
+    --line: #261f3a;
+    --fg: #ece9f7;
+    --muted: #8d86a8;
+    --accent: #b05cff;
+    --accent-ink: #12061f;
+    --danger: #ff7a8a;
+    --font-display: "Kanit", "Noto Sans Thai", system-ui, sans-serif;
+    --font-body: "Noto Sans Thai", "Kanit", system-ui, sans-serif;
+    --font-code: "JetBrains Mono", ui-monospace, Menlo, Consolas, monospace;
+    color-scheme: dark;
+  }
+  * { box-sizing: border-box; }
+  body {
+    background: var(--bg);
+    color: var(--fg);
+    font-family: var(--font-body);
+    font-size: 16px;
+    line-height: 1.6;
+    padding-left: max(16px, env(safe-area-inset-left, 0px));
+    padding-right: max(16px, env(safe-area-inset-right, 0px));
+    padding-block: 40px 64px;
+  }
+  .wrap { max-width: 960px; margin: 0 auto; display: flex; flex-direction: column; gap: 28px; }
+  h1 {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: clamp(2rem, 6vw, 3.25rem);
+    line-height: 1.15;
+    margin: 0;
+    text-wrap: balance;
+  }
+  h1 span { color: var(--accent); }
+  .lead { margin: 0; color: var(--muted); max-width: 52ch; }
+  :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+  /* ---------- Auth ---------- */
+  .auth { max-width: 420px; margin: 0 auto; display: flex; flex-direction: column; gap: 24px; }
+  .auth-head { display: flex; flex-direction: column; gap: 8px; }
+  .auth-card {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  .tabs { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; background: var(--bg); border: 1px solid var(--line); border-radius: 6px; padding: 4px; }
+  .tab {
+    background: transparent;
+    color: var(--muted);
+    border: 0;
+    border-radius: 4px;
+    padding: 8px 10px;
+    font: 500 0.9rem var(--font-display);
+    cursor: pointer;
+  }
+  .tab:hover { color: var(--fg); }
+  .tab[aria-selected="true"] { background: var(--accent); color: var(--accent-ink); }
+  form { display: flex; flex-direction: column; gap: 14px; }
+  .field { display: flex; flex-direction: column; gap: 6px; }
+  .field label { font-size: 0.875rem; color: var(--muted); }
+  .field input {
+    width: 100%;
+    background: var(--bg);
+    color: var(--fg);
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    padding: 11px 13px;
+    font: inherit;
+  }
+  .field input:focus-visible { border-color: var(--accent); }
+  .error { margin: 0; min-height: 1.4em; color: var(--danger); font-size: 0.875rem; }
+  .primary {
+    background: var(--accent);
+    color: var(--accent-ink);
+    border: 0;
+    border-radius: 6px;
+    padding: 12px 18px;
+    font: 600 1rem var(--font-display);
+    cursor: pointer;
+  }
+  .primary:hover { filter: brightness(1.1); }
+  .divider { display: flex; align-items: center; gap: 12px; color: var(--muted); font-size: 0.8125rem; }
+  .divider::before, .divider::after { content: ""; flex: 1; height: 1px; background: var(--line); }
+  .socials { display: flex; flex-direction: column; gap: 10px; }
+  .social {
+    background: transparent;
+    color: var(--fg);
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    padding: 11px 14px;
+    font: 500 0.9375rem var(--font-body);
+    cursor: pointer;
+  }
+  .social:hover { border-color: var(--accent); }
+  .notice { margin: 0; color: var(--muted); font-size: 0.8125rem; min-height: 1.4em; }
+
+  /* ---------- Library ---------- */
+  .topbar { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+  .topbar-text { display: flex; flex-direction: column; gap: 8px; min-width: 0; }
+  .user { display: flex; align-items: center; gap: 12px; color: var(--muted); font-size: 0.9rem; }
+  .user strong { color: var(--fg); font-weight: 500; overflow-wrap: anywhere; }
+  .ghost {
+    background: transparent;
+    color: var(--fg);
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    padding: 7px 14px;
+    font: 500 0.875rem var(--font-body);
+    cursor: pointer;
+  }
+  .ghost:hover { border-color: var(--accent); }
+
+  .controls { display: flex; flex-direction: column; gap: 14px; }
+  .search {
+    width: 100%;
+    background: var(--surface);
+    color: var(--fg);
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    padding: 12px 14px;
+    font: inherit;
+  }
+  .search::placeholder { color: var(--muted); }
+  .chips { display: flex; flex-wrap: wrap; gap: 8px; }
+  .chip {
+    background: transparent;
+    color: var(--muted);
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    padding: 6px 14px;
+    font: 500 0.875rem var(--font-body);
+    cursor: pointer;
+  }
+  .chip:hover { color: var(--fg); border-color: var(--accent); }
+  .chip[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
+
+  .count { color: var(--muted); font-size: 0.875rem; margin: 0; }
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 420px), 1fr));
+    gap: 16px;
+  }
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    min-width: 0;
+  }
+  .card-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; }
+  .card-title { min-width: 0; }
+  .card h2 { font-family: var(--font-display); font-weight: 500; font-size: 1.15rem; margin: 0; line-height: 1.3; }
+  .card p { margin: 4px 0 0; color: var(--muted); font-size: 0.9rem; }
+  .tag {
+    flex: none;
+    font: 500 0.75rem var(--font-code);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--accent);
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    padding: 2px 8px;
+  }
+  .code-box {
+    background: var(--bg);
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    overflow: auto;
+    max-height: 260px;
+  }
+  pre {
+    margin: 0;
+    padding: 14px;
+    font-family: var(--font-code);
+    font-size: 0.8125rem;
+    line-height: 1.65;
+    tab-size: 2;
+    white-space: pre;
+  }
+  .copy {
+    align-self: flex-start;
+    background: var(--accent);
+    color: var(--accent-ink);
+    border: 0;
+    border-radius: 6px;
+    padding: 9px 18px;
+    font: 600 0.9rem var(--font-display);
+    cursor: pointer;
+  }
+  .copy:hover { filter: brightness(1.1); }
+  .copy.done { background: var(--fg); }
+  .empty { color: var(--muted); padding: 32px 0; text-align: center; }
+  footer { color: var(--muted); font-size: 0.8125rem; border-top: 1px solid var(--line); padding-top: 16px; }
+  /* ---------- Icons, glow, sheen ---------- */
+  :root {
+    --sheen-light: rgba(255, 255, 255, 0.38);
+    --sheen-soft: rgba(176, 92, 255, 0.22);
+    --glow-a: rgba(176, 92, 255, 0.22);
+    --glow-b: rgba(120, 70, 255, 0.18);
+    --lift: rgba(176, 92, 255, 0.35);
+    --accent-soft: rgba(176, 92, 255, 0.55);
+    --ring: rgba(176, 92, 255, 0.2);
+  }
+
+  /* ---------- Icons (theme-aware masks), search bar, contact ---------- */
+  :root { --ico-google: url(data:image/png;base64,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); --ico-discord: url(data:image/png;base64,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); }
+  .ico {
+    width: 22px; height: 22px; flex: none; display: inline-block;
+    background: currentColor;
+    -webkit-mask-repeat: no-repeat; mask-repeat: no-repeat;
+    -webkit-mask-position: center; mask-position: center;
+    -webkit-mask-size: contain; mask-size: contain;
+  }
+  .ico-google { -webkit-mask-image: var(--ico-google); mask-image: var(--ico-google); }
+  .ico-discord { -webkit-mask-image: var(--ico-discord); mask-image: var(--ico-discord); }
+
+  .searchbar {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 8px;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    padding: 5px 5px 5px 20px;
+  }
+  .searchbar:focus-within { border-color: var(--accent); box-shadow: 0 0 0 3px var(--ring); }
+  .searchbar .search {
+    flex: 1;
+    min-width: 0;
+    width: auto;
+    background: transparent;
+    border: 0;
+    border-radius: 0;
+    padding: 9px 0;
+    outline: none;
+    box-shadow: none;
+  }
+  .searchgo {
+    flex: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    border-radius: 999px;
+    padding: 10px 20px;
+  }
+  .searchgo svg { width: 18px; height: 18px; flex: none; }
+
+  .contact { display: flex; flex-direction: column; align-items: flex-start; gap: 8px; }
+  .contact-title { font: 500 0.75rem var(--font-code); letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+  .contact-btn { display: inline-flex; align-items: center; gap: 12px; border-radius: 999px; padding: 8px 20px 8px 14px; text-align: left; }
+  .contact-btn .ico { width: 26px; height: 26px; color: var(--accent); }
+  .contact-text { display: flex; flex-direction: column; line-height: 1.25; min-width: 0; }
+  .contact-text small { color: var(--muted); font-size: 0.75rem; }
+  .contact-text strong { font: 500 1rem var(--font-body); overflow-wrap: anywhere; }
+  .contact-hint { color: var(--muted); font-size: 0.8125rem; }
+  .contact-hint:empty { display: none; }
+  html { scroll-behavior: smooth; }
+  .social { display: flex; align-items: center; justify-content: center; gap: 10px; }
+  .social { background: var(--surface); }
+  .social svg { width: 20px; height: 20px; flex: none; }
+  .social img { width: 22px; height: 22px; flex: none; border-radius: 4px; mix-blend-mode: screen; }
+  .primary, .copy, .social, .ghost, .chip, .tab {
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
+  }
+  .primary, .copy { --sheen: var(--sheen-light); }
+  .social, .ghost, .chip, .tab { --sheen: var(--sheen-soft); }
+  .chip[aria-pressed="true"], .tab[aria-selected="true"] { --sheen: var(--sheen-light); }
+  .glow { position: fixed; inset: 0; overflow: hidden; pointer-events: none; z-index: 0; }
+  .glow i { position: absolute; width: 60vmax; height: 60vmax; border-radius: 50%; }
+  .glow i:nth-child(1) { top: -32vmax; left: -22vmax; background: radial-gradient(circle, var(--glow-a), transparent 65%); }
+  .glow i:nth-child(2) { bottom: -38vmax; right: -26vmax; background: radial-gradient(circle, var(--glow-b), transparent 65%); }
+  .auth, .wrap { position: relative; z-index: 1; }
+
+  /* ตารางสี่เหลี่ยมจางๆ เลื่อนขึ้นเรื่อยๆ (ขอบจางหายเข้าหาขอบจอ) */
+  :root { --grid-line: rgba(176, 92, 255, 0.11); }
+  .gridfx {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    background-image:
+      linear-gradient(var(--grid-line) 1px, transparent 1px),
+      linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+    background-size: 48px 48px;
+    -webkit-mask-image: radial-gradient(ellipse at 50% 40%, #000 25%, transparent 88%);
+    mask-image: radial-gradient(ellipse at 50% 40%, #000 25%, transparent 88%);
+  }
+  html[data-grid="off"] .gridfx { display: none; }
+
+  /* ---------- Motion ---------- */
+  @media (prefers-reduced-motion: no-preference) {
+    .primary, .copy, .social, .ghost, .chip, .tab {
+      transition: background 0.3s ease, color 0.3s ease, border-color 0.3s ease, filter 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .primary:hover, .copy:hover { transform: translateY(-2px); box-shadow: 0 8px 24px var(--lift); }
+    .social:hover, .ghost:hover { transform: translateY(-1px); }
+    .primary:active, .copy:active, .social:active, .ghost:active { transform: translateY(0) scale(0.98); }
+
+    /* เงาวิ่งผ่านปุ่มช้าๆ ไปมา */
+    .primary::after, .copy::after, .social::after, .ghost::after, .chip::after, .tab::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background: linear-gradient(105deg, transparent 36%, var(--sheen) 50%, transparent 64%);
+      transform: translateX(-130%);
+      animation: sheen var(--sheen-dur, 4.8s) ease-in-out infinite alternate;
+    }
+    .social:nth-of-type(2)::after, .chip:nth-child(even)::after, .card:nth-child(even) .copy::after { animation-delay: -2.4s; }
+    .chip:nth-child(3n)::after, .card:nth-child(3n) .copy::after { animation-delay: -1.2s; }
+    /* ความเร็วเงาตั้งได้ในเมนูแอดมิน (--sheen-dur) */
+
+    .gridfx { animation: grid-up var(--grid-dur, 6s) linear infinite; }
+    .glow i:nth-child(1) { animation: drift 24s ease-in-out infinite alternate; }
+    .glow i:nth-child(2) { animation: drift 30s ease-in-out infinite alternate-reverse; }
+
+    .auth:not([hidden]), .wrap:not([hidden]) { animation: enter var(--enter-dur, 0.8s) cubic-bezier(0.2, 0.7, 0.2, 1) both; }
+    #panel-signup:not([hidden]), #panel-login:not([hidden]) { animation: fade 0.45s ease both; }
+    .error:not(:empty), .notice:not(:empty) { animation: fade 0.4s ease both; }
+
+    .card { transition: border-color 0.35s ease, transform 0.35s ease; }
+    .card:hover { border-color: var(--accent-soft); transform: translateY(-2px); }
+    .card.enter { animation: enter var(--enter-dur, 0.75s) cubic-bezier(0.2, 0.7, 0.2, 1) both; animation-delay: calc(var(--i, 0) * var(--stagger, 90ms)); }
+    .field input, .search { transition: border-color 0.3s ease, box-shadow 0.3s ease; }
+    .field input:focus-visible, .search:focus-visible { box-shadow: 0 0 0 3px var(--ring); }
+
+    @keyframes grid-up { from { background-position: 0 0, 0 0; } to { background-position: 0 -48px, 0 -48px; } }
+    @keyframes sheen { from { transform: translateX(-130%); } to { transform: translateX(130%); } }
+    @keyframes drift { from { transform: translate(0, 0) scale(1); } to { transform: translate(7vmax, 5vmax) scale(1.12); } }
+    @keyframes enter { from { opacity: var(--e-o); transform: var(--e-t); filter: var(--e-f); } to { opacity: 1; transform: none; filter: none; } }
+    @keyframes fx-press { 0% { transform: scale(1); } 40% { transform: scale(0.92); } 100% { transform: scale(1); } }
+    @keyframes fx-bounce { 0% { transform: scale(1); } 30% { transform: scale(0.9); } 60% { transform: scale(1.08); } 80% { transform: scale(0.98); } 100% { transform: scale(1); } }
+    @keyframes fx-pulse { 0% { box-shadow: 0 0 0 0 var(--accent-soft); } 100% { box-shadow: 0 0 0 16px transparent; } }
+    @keyframes ripple { from { transform: scale(0); opacity: 1; } to { transform: scale(1); opacity: 0; } }
+    @keyframes fade { from { opacity: 0; } to { opacity: 1; } }
+
+    /* อนิเมชันตอนกดปุ่ม (เลือกได้ในเมนูแอดมิน) */
+    .fx-press { animation: fx-press var(--click-dur, 0.4s) ease; }
+    .fx-bounce { animation: fx-bounce var(--click-dur, 0.5s) ease; }
+    .fx-pulse { animation: fx-pulse var(--click-dur, 0.6s) ease-out; }
+    .ripple {
+      position: absolute;
+      border-radius: 50%;
+      pointer-events: none;
+      background: radial-gradient(circle, var(--ripple, rgba(255, 255, 255, 0.5)) 0%, transparent 70%);
+      transform: scale(0);
+      animation: ripple var(--click-dur, 0.6s) ease-out forwards;
+    }
+  }
+
+  /* ---------- ค่าที่แอดมินตั้งได้ ---------- */
+  html { --e-o: 0; --e-t: translateY(18px); --e-f: none; }
+  html[data-enter="fade"] { --e-t: none; }
+  html[data-enter="slide-up"] { --e-t: translateY(18px); }
+  html[data-enter="slide-down"] { --e-t: translateY(-18px); }
+  html[data-enter="zoom"] { --e-t: scale(0.94); }
+  html[data-enter="blur"] { --e-t: none; --e-f: blur(10px); }
+  html[data-enter="none"] .auth, html[data-enter="none"] .wrap, html[data-enter="none"] .card.enter { animation: none !important; }
+  html[data-glow="off"] .glow { display: none; }
+  html[data-sheen="off"] .primary::after, html[data-sheen="off"] .copy::after, html[data-sheen="off"] .social::after,
+  html[data-sheen="off"] .ghost::after, html[data-sheen="off"] .chip::after, html[data-sheen="off"] .tab::after { display: none; }
+  html[data-hover="off"] .primary:hover, html[data-hover="off"] .copy:hover, html[data-hover="off"] .social:hover,
+  html[data-hover="off"] .ghost:hover, html[data-hover="off"] .card:hover { transform: none; box-shadow: none; }
+  .primary, .copy { --ripple: rgba(255, 255, 255, 0.5); }
+  .social, .ghost, .chip, .tab { --ripple: var(--accent-soft); }
+  .chip[aria-pressed="true"], .tab[aria-selected="true"] { --ripple: rgba(255, 255, 255, 0.5); }
+
+  /* ---------- เมนูแอดมิน ---------- */
+  .admin-tabs { grid-template-columns: repeat(auto-fit, minmax(96px, 1fr)); }
+  h1 b { font-weight: inherit; }
+  .field textarea.short { min-height: 76px; font-family: var(--font-body); font-size: 0.9375rem; white-space: pre-wrap; }
+  .field .note { color: var(--muted); font-size: 0.8125rem; }
+  .panel {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    min-width: 0;
+  }
+  .panel h2, .group h3 { font-family: var(--font-display); font-weight: 500; font-size: 1.15rem; margin: 0; line-height: 1.3; }
+  .group h3 { font-size: 1rem; color: var(--accent); }
+  .hint { margin: 0; color: var(--muted); font-size: 0.875rem; }
+  .group { border-top: 1px solid var(--line); padding-top: 16px; display: flex; flex-direction: column; gap: 14px; }
+  .color-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr)); gap: 12px; }
+  .color-row { display: flex; align-items: center; gap: 12px; background: var(--bg); border: 1px solid var(--line); border-radius: 6px; padding: 10px 12px; cursor: pointer; min-width: 0; }
+  .color-row .name { flex: 1; font-size: 0.9rem; min-width: 0; }
+  .color-row input[type="color"] { width: 44px; height: 32px; padding: 0; border: 1px solid var(--line); border-radius: 4px; background: none; cursor: pointer; flex: none; }
+  .color-row code { font-family: var(--font-code); font-size: 0.8rem; color: var(--muted); }
+  .field select, .field textarea {
+    width: 100%;
+    background: var(--bg);
+    color: var(--fg);
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    padding: 11px 13px;
+    font: inherit;
+  }
+  .field select:focus-visible, .field textarea:focus-visible { border-color: var(--accent); }
+  .field textarea { font-family: var(--font-code); font-size: 0.8125rem; line-height: 1.6; min-height: 200px; resize: vertical; tab-size: 2; white-space: pre; overflow: auto; }
+  .field output { color: var(--accent); font-family: var(--font-code); font-size: 0.8125rem; margin-left: 6px; }
+  .field input[type="range"], .check input { accent-color: var(--accent); }
+  .field input[type="range"] { padding: 0; border: 0; background: none; }
+  .check { display: flex; align-items: center; gap: 10px; cursor: pointer; }
+  .check input { width: 18px; height: 18px; flex: none; }
+  .row-actions { display: flex; gap: 10px; flex-wrap: wrap; }
+  .admin-list { display: flex; flex-direction: column; gap: 10px; }
+  .admin-item { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; background: var(--bg); border: 1px solid var(--line); border-radius: 6px; padding: 10px 12px; }
+  .admin-item .meta { flex: 1 1 200px; min-width: 0; }
+  .admin-item .meta strong { display: block; font-weight: 500; overflow-wrap: anywhere; }
+  .admin-item .meta small { color: var(--muted); }
+  .admin-item .acts { display: flex; gap: 8px; }
+  .ghost.danger { color: var(--danger); }
+  .ghost.danger.armed { background: var(--danger); border-color: var(--danger); color: var(--bg); }
+  .ghost.small { padding: 5px 12px; font-size: 0.8125rem; }
+</style>
+
+<div class="glow" aria-hidden="true"><i></i><i></i></div>
+<div class="gridfx" aria-hidden="true"></div>
+
+<!-- ============ สมัครสมาชิก / เข้าสู่ระบบ ============ -->
+<div class="auth" id="auth">
+  <div class="auth-head">
+    <h1><b data-t="titleA">คลัง</b><span data-t="titleB">สคริปต์</span></h1>
+    <p class="lead" data-t="authLead">สมัครสมาชิกหรือเข้าสู่ระบบเพื่อดูและคัดลอกสคริปต์ทั้งหมด</p>
+  </div>
+
+  <div class="auth-card">
+    <div class="tabs" role="tablist" aria-label="สมัครหรือเข้าสู่ระบบ">
+      <button type="button" class="tab" id="tab-signup" role="tab" aria-selected="true" aria-controls="panel-signup" data-t="tabSignup">สมัครสมาชิก</button>
+      <button type="button" class="tab" id="tab-login" role="tab" aria-selected="false" aria-controls="panel-login" data-t="tabLogin">เข้าสู่ระบบ</button>
+    </div>
+
+    <div id="panel-signup" role="tabpanel" aria-labelledby="tab-signup">
+      <form id="form-signup" novalidate>
+        <div class="field">
+          <label for="su-name" data-t="lblSuName">ชื่อ</label>
+          <input id="su-name" type="text" autocomplete="name" required>
+        </div>
+        <div class="field">
+          <label for="su-email" data-t="lblSuEmail">อีเมล Gmail</label>
+          <input id="su-email" type="email" autocomplete="email" placeholder="ชื่อคุณ@gmail.com" data-ph="phEmail" required>
+        </div>
+        <div class="field">
+          <label for="su-pass" data-t="lblSuPass">รหัสผ่าน</label>
+          <input id="su-pass" type="password" autocomplete="new-password" minlength="8" required>
+        </div>
+        <div class="field">
+          <label for="su-pass2" data-t="lblSuPass2">ยืนยันรหัสผ่านอีกครั้ง</label>
+          <input id="su-pass2" type="password" autocomplete="new-password" minlength="8" required>
+        </div>
+        <p class="error" id="err-signup" role="alert"></p>
+        <button type="submit" class="primary" data-t="signupBtn">สมัครสมาชิก</button>
+      </form>
+    </div>
+
+    <div id="panel-login" role="tabpanel" aria-labelledby="tab-login" hidden>
+      <form id="form-login" novalidate>
+        <div class="field">
+          <label for="li-name" data-t="lblLiName">ชื่อ</label>
+          <input id="li-name" type="text" autocomplete="username" required>
+        </div>
+        <div class="field">
+          <label for="li-pass" data-t="lblLiPass">รหัสผ่าน</label>
+          <input id="li-pass" type="password" autocomplete="current-password" required>
+        </div>
+        <p class="error" id="err-login" role="alert"></p>
+        <button type="submit" class="primary" data-t="loginBtn">เข้าสู่ระบบ</button>
+      </form>
+    </div>
+
+    <div class="divider" data-t="divider">หรือ</div>
+
+    <div class="socials">
+      <button type="button" class="social" data-provider="Google">
+        <span class="ico ico-google" aria-hidden="true"></span>
+        <span data-t="btnGoogle">ดำเนินการต่อด้วยบัญชี Google</span>
+      </button>
+      <button type="button" class="social" data-provider="Discord">
+        <span class="ico ico-discord" aria-hidden="true"></span>
+        <span data-t="btnDiscord">ดำเนินการต่อด้วยบัญชี Discord</span>
+      </button>
+      <p class="notice" id="notice" role="status"></p>
+    </div>
+  </div>
+  <div class="contact">
+    <span class="contact-title" data-t="contactTitle">ช่องทางการติดต่อ</span>
+    <button type="button" class="ghost contact-btn" data-contact>
+      <span class="ico ico-discord" aria-hidden="true"></span>
+      <span class="contact-text"><small>Discord</small><strong data-t="contactHandle">googye69</strong></span>
+    </button>
+    <span class="contact-hint" data-t="contactHint">กดเพื่อคัดลอกชื่อผู้ใช้</span>
+  </div>
+</div>
+
+<!-- ============ คลังสคริปต์ (แสดงหลังเข้าสู่ระบบ) ============ -->
+<div class="wrap" id="app" hidden>
+  <div class="topbar">
+    <div class="topbar-text">
+      <h1><b data-t="titleA">คลัง</b><span data-t="titleB">สคริปต์</span></h1>
+      <p class="lead" data-t="libLead">รวมสคริปต์ที่ผมเขียนเอง กดคัดลอกแล้วนำไปใช้ได้เลย</p>
+    </div>
+    <div class="user">
+      <span><span data-t="greeting">สวัสดี</span> <strong id="user-name"></strong></span>
+      <button type="button" class="ghost" id="admin-open" hidden>เมนูแอดมิน</button>
+      <button type="button" class="ghost" id="logout" data-t="logout">ออกจากระบบ</button>
+    </div>
+  </div>
+
+  <div class="controls">
+    <form class="searchbar" id="search-form" role="search">
+      <label for="q" hidden>ค้นหาสคริปต์</label>
+      <input id="q" class="search" type="search" placeholder="ค้นหาสคริปต์..." data-ph="phSearch" autocomplete="off">
+      <button type="submit" class="primary searchgo" id="search-go">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.6-3.6"/></svg>
+        <span data-t="searchBtn">ค้นหา</span>
+      </button>
+    </form>
+    <div class="chips" id="chips" role="group" aria-label="กรองตามหมวด"></div>
+  </div>
+
+  <p class="count" id="count" aria-live="polite"></p>
+  <main class="grid" id="grid"></main>
+
+  <div class="contact">
+    <span class="contact-title" data-t="contactTitle">ช่องทางการติดต่อ</span>
+    <button type="button" class="ghost contact-btn" data-contact>
+      <span class="ico ico-discord" aria-hidden="true"></span>
+      <span class="contact-text"><small>Discord</small><strong data-t="contactHandle">googye69</strong></span>
+    </button>
+    <span class="contact-hint" data-t="contactHint">กดเพื่อคัดลอกชื่อผู้ใช้</span>
+  </div>
+
+  <footer data-t="footer">อยากได้สคริปต์เพิ่มหรือพบสคริปต์ที่ใช้ไม่ได้ แจ้งแอดมินได้เลย</footer>
+</div>
+
+<!-- ============ เมนูแอดมิน ============ -->
+<div class="wrap" id="admin" hidden>
+  <div class="topbar">
+    <div class="topbar-text">
+      <h1>เมนู<span>แอดมิน</span></h1>
+      <p class="lead">ปรับสีเว็บ จัดการสคริปต์ และตั้งค่าอนิเมชัน</p>
+    </div>
+    <div class="user"><button type="button" class="ghost" id="admin-back">กลับหน้าคลัง</button></div>
+  </div>
+
+  <div class="tabs admin-tabs" role="tablist" aria-label="เมนูแอดมิน">
+    <button type="button" class="tab" role="tab" data-panel="ad-theme" aria-selected="true">ธีมสี</button>
+    <button type="button" class="tab" role="tab" data-panel="ad-scripts" aria-selected="false">จัดการสคริปต์</button>
+    <button type="button" class="tab" role="tab" data-panel="ad-anim" aria-selected="false">อนิเมชัน</button>
+    <button type="button" class="tab" role="tab" data-panel="ad-texts" aria-selected="false">ข้อความเว็บ</button>
+  </div>
+
+  <section class="panel" id="ad-theme">
+    <h2>ธีมสี</h2>
+    <p class="hint">เลือกชุดสีสำเร็จรูป หรือปรับแต่ละสีเองได้อิสระ เห็นผลทันทีทั้งเว็บ กดบันทึกเพื่อให้ทุกคนเห็นสีใหม่</p>
+    <div class="chips" id="presets" role="group" aria-label="ชุดสีสำเร็จรูป"></div>
+    <div class="color-grid" id="color-grid"></div>
+    <div class="row-actions">
+      <button type="button" class="primary" id="theme-save">บันทึกธีม</button>
+      <button type="button" class="ghost" id="theme-reset">คืนค่าเริ่มต้น</button>
+    </div>
+    <p class="notice" id="theme-msg" role="status"></p>
+  </section>
+
+  <section class="panel" id="ad-scripts" hidden>
+    <h2 id="s-heading">เพิ่มสคริปต์</h2>
+    <form id="form-script" novalidate>
+      <div class="field">
+        <label for="s-title">ชื่อสคริปต์</label>
+        <input id="s-title" type="text" autocomplete="off">
+      </div>
+      <div class="field">
+        <label for="s-desc">คำอธิบายสั้นๆ</label>
+        <input id="s-desc" type="text" autocomplete="off">
+      </div>
+      <div class="field">
+        <label for="s-cat">หมวดหมู่ (พิมพ์ใหม่ได้ หรือเลือกจากที่มี)</label>
+        <input id="s-cat" type="text" list="cat-list" autocomplete="off" placeholder="เช่น Roblox, Minecraft">
+        <datalist id="cat-list"></datalist>
+      </div>
+      <div class="field">
+        <label for="s-lang">ภาษา</label>
+        <input id="s-lang" type="text" list="lang-list" autocomplete="off" placeholder="เช่น Lua, JavaScript">
+        <datalist id="lang-list">
+          <option value="Lua"></option><option value="JavaScript"></option><option value="Python"></option>
+          <option value="JSON"></option><option value="Bash"></option><option value="Text"></option>
+        </datalist>
+      </div>
+      <div class="field">
+        <label for="s-code">โค้ดสคริปต์</label>
+        <textarea id="s-code" spellcheck="false" autocomplete="off"></textarea>
+      </div>
+      <p class="error" id="s-err" role="alert"></p>
+      <div class="row-actions">
+        <button type="submit" class="primary" id="s-save">เพิ่มสคริปต์</button>
+        <button type="button" class="ghost" id="s-cancel" hidden>ยกเลิกการแก้ไข</button>
+      </div>
+    </form>
+    <div class="group">
+      <h2>สคริปต์ทั้งหมด <span class="hint" id="s-count"></span></h2>
+      <div class="admin-list" id="ad-list"></div>
+    </div>
+  </section>
+
+  <section class="panel" id="ad-texts" hidden>
+    <h2>ข้อความเว็บ</h2>
+    <p class="hint">แก้ข้อความทุกส่วนของเว็บได้ที่นี่ ชื่อเว็บ หัวข้อ ป้ายช่อง ข้อความบนปุ่ม และข้อความแจ้งเตือน เห็นผลทันที กดบันทึกเพื่อให้ทุกคนเห็น ถ้าล้างช่องจนว่าง ระบบจะใช้ข้อความเริ่มต้นแทน (ยกเว้นช่องที่เป็นคำอธิบายเสริม ปล่อยว่างเพื่อซ่อนได้)</p>
+    <div id="texts-box"></div>
+    <div class="row-actions">
+      <button type="button" class="primary" id="texts-save">บันทึกข้อความ</button>
+      <button type="button" class="ghost" id="texts-reset">คืนข้อความเริ่มต้นทั้งหมด</button>
+    </div>
+    <p class="notice" id="texts-msg" role="status"></p>
+  </section>
+
+  <section class="panel" id="ad-anim" hidden>
+    <h2>อนิเมชัน</h2>
+    <p class="hint">เห็นผลทันที กดบันทึกเพื่อให้ทุกคนเห็น ถ้าอุปกรณ์เปิดโหมดลดการเคลื่อนไหวไว้ อนิเมชันจะไม่แสดง</p>
+
+    <div class="group">
+      <h3>ตอนเข้าเว็บ</h3>
+      <div class="field">
+        <label for="a-enter">รูปแบบ</label>
+        <select id="a-enter">
+          <option value="none">ไม่มีอนิเมชัน</option>
+          <option value="fade">เฟดเข้า</option>
+          <option value="slide-up">เลื่อนขึ้น</option>
+          <option value="slide-down">เลื่อนลง</option>
+          <option value="zoom">ซูมเข้า</option>
+          <option value="blur">เบลอแล้วค่อยชัด</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="a-enter-dur">ใช้เวลา<output id="o-enter-dur"></output></label>
+        <input id="a-enter-dur" type="range" min="0.2" max="2" step="0.1">
+      </div>
+      <div class="field">
+        <label for="a-stagger">หน่วงการ์ดสคริปต์ทีละใบ<output id="o-stagger"></output></label>
+        <input id="a-stagger" type="range" min="0" max="300" step="10">
+      </div>
+      <label class="check" for="a-glow"><input id="a-glow" type="checkbox"> แสงเรืองเคลื่อนไหวด้านหลังเว็บ</label>
+      <label class="check" for="a-grid"><input id="a-grid" type="checkbox"> ตารางสี่เหลี่ยมจางๆ เลื่อนขึ้นด้านหลังเว็บ</label>
+      <div class="field">
+        <label for="a-grid-dur">ความเร็วตาราง (ยิ่งมากยิ่งช้า)<output id="o-grid-dur"></output></label>
+        <input id="a-grid-dur" type="range" min="2" max="20" step="1">
+      </div>
+    </div>
+
+    <div class="group">
+      <h3>ปุ่ม</h3>
+      <div class="field">
+        <label for="a-click">ตอนกดปุ่ม</label>
+        <select id="a-click">
+          <option value="none">ไม่มีอนิเมชัน</option>
+          <option value="ripple">คลื่นกระจายจากจุดที่กด</option>
+          <option value="press">ยุบลงแล้วคืนตัว</option>
+          <option value="bounce">เด้งดึ๋ง</option>
+          <option value="pulse">วงแสงแผ่ออก</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="a-click-dur">ความเร็วตอนกด<output id="o-click-dur"></output></label>
+        <input id="a-click-dur" type="range" min="0.2" max="1.2" step="0.1">
+      </div>
+      <label class="check" for="a-sheen"><input id="a-sheen" type="checkbox"> เงาวิ่งผ่านปุ่มช้าๆ</label>
+      <div class="field">
+        <label for="a-sheen-dur">ความเร็วเงา (ยิ่งมากยิ่งช้า)<output id="o-sheen-dur"></output></label>
+        <input id="a-sheen-dur" type="range" min="2" max="12" step="0.5">
+      </div>
+      <label class="check" for="a-hover"><input id="a-hover" type="checkbox"> ปุ่มและการ์ดยกขึ้นเมื่อเอาเมาส์ชี้</label>
+      <div class="row-actions">
+        <button type="button" class="primary" id="try-click">ลองกดปุ่มนี้</button>
+        <button type="button" class="ghost" id="replay">เล่นอนิเมชันเข้าเว็บอีกครั้ง</button>
+      </div>
+    </div>
+
+    <div class="row-actions">
+      <button type="button" class="primary" id="anim-save">บันทึกอนิเมชัน</button>
+      <button type="button" class="ghost" id="anim-reset">คืนค่าเริ่มต้น</button>
+    </div>
+    <p class="notice" id="anim-msg" role="status"></p>
+  </section>
+</div>
+
+<script>
+  // ---------- ตัวช่วยพื้นฐาน ----------
+  var mem = {};
+  function load(k) {
+    try { var v = localStorage.getItem(k); if (v) return JSON.parse(v); } catch (e) {}
+    return mem[k] || null;
+  }
+  function save(k, v) {
+    mem[k] = v;
+    try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {}
+  }
+  function drop(k) {
+    delete mem[k];
+    try { localStorage.removeItem(k); } catch (e) {}
+  }
+  function clone(o) { return JSON.parse(JSON.stringify(o)); }
+  function noop() {}
+
+  // =====================================================================
+  //  ธีม + อนิเมชัน (ค่าเริ่มต้น และตัวนำไปใช้กับหน้าเว็บ)
+  // =====================================================================
+  var DEFAULT_THEME = {
+    bg: "#0b0912", surface: "#14111f", line: "#261f3a",
+    fg: "#ece9f7", muted: "#8d86a8", accent: "#b05cff", accentInk: "#12061f"
+  };
+  var DEFAULT_ANIM = {
+    enter: "slide-up", enterDur: 0.8, stagger: 90, glow: true, grid: true, gridDur: 6,
+    click: "ripple", clickDur: 0.6, sheen: true, sheenDur: 4.8, hover: true
+  };
+  // ข้อความทั้งหมดของเว็บที่แอดมินแก้ได้ (group = หัวข้อในเมนู, long = ช่องหลายบรรทัด, optional = ปล่อยว่างได้)
+  var G1 = "ชื่อเว็บ", G2 = "หน้าสมัคร / เข้าสู่ระบบ", G3 = "หน้าคลังสคริปต์", G4 = "ข้อความแจ้งเตือน", G5 = "ช่องทางการติดต่อ";
+  var TEXT_FIELDS = [
+    { group: G1, key: "titleA", label: "ชื่อเว็บ ส่วนที่ 1 (สีปกติ)", def: "คลัง" },
+    { group: G1, key: "titleB", label: "ชื่อเว็บ ส่วนที่ 2 (สีเด่น)", def: "สคริปต์" },
+
+    { group: G2, key: "authLead", label: "ข้อความใต้ชื่อเว็บ", def: "สมัครสมาชิกหรือเข้าสู่ระบบเพื่อดูและคัดลอกสคริปต์ทั้งหมด", long: true, optional: true },
+    { group: G2, key: "tabSignup", label: "แท็บสมัครสมาชิก", def: "สมัครสมาชิก" },
+    { group: G2, key: "tabLogin", label: "แท็บเข้าสู่ระบบ", def: "เข้าสู่ระบบ" },
+    { group: G2, key: "lblSuName", label: "ป้ายช่องชื่อ (หน้าสมัคร)", def: "ชื่อ" },
+    { group: G2, key: "lblSuEmail", label: "ป้ายช่องอีเมล (หน้าสมัคร)", def: "อีเมล Gmail" },
+    { group: G2, key: "phEmail", label: "ข้อความตัวอย่างในช่องอีเมล", def: "ชื่อคุณ@gmail.com" },
+    { group: G2, key: "lblSuPass", label: "ป้ายช่องรหัสผ่าน (หน้าสมัคร)", def: "รหัสผ่าน" },
+    { group: G2, key: "lblSuPass2", label: "ป้ายช่องยืนยันรหัสผ่าน", def: "ยืนยันรหัสผ่านอีกครั้ง" },
+    { group: G2, key: "signupBtn", label: "ปุ่มสมัครสมาชิก", def: "สมัครสมาชิก" },
+    { group: G2, key: "lblLiName", label: "ป้ายช่องชื่อ (หน้าเข้าสู่ระบบ)", def: "ชื่อ" },
+    { group: G2, key: "lblLiPass", label: "ป้ายช่องรหัสผ่าน (หน้าเข้าสู่ระบบ)", def: "รหัสผ่าน" },
+    { group: G2, key: "loginBtn", label: "ปุ่มเข้าสู่ระบบ", def: "เข้าสู่ระบบ" },
+    { group: G2, key: "divider", label: "คำคั่นก่อนปุ่ม Google / Discord", def: "หรือ" },
+    { group: G2, key: "btnGoogle", label: "ปุ่ม Google", def: "ดำเนินการต่อด้วยบัญชี Google" },
+    { group: G2, key: "btnDiscord", label: "ปุ่ม Discord", def: "ดำเนินการต่อด้วยบัญชี Discord" },
+
+    { group: G3, key: "libLead", label: "ข้อความใต้ชื่อเว็บ", def: "รวมสคริปต์ที่ผมเขียนเอง กดคัดลอกแล้วนำไปใช้ได้เลย", long: true, optional: true },
+    { group: G3, key: "greeting", label: "คำทักทาย (ตามด้วยชื่อสมาชิก)", def: "สวัสดี" },
+    { group: G3, key: "logout", label: "ปุ่มออกจากระบบ", def: "ออกจากระบบ" },
+    { group: G3, key: "phSearch", label: "ข้อความตัวอย่างในช่องค้นหา", def: "ค้นหาสคริปต์..." },
+    { group: G3, key: "searchBtn", label: "ปุ่มค้นหา", def: "ค้นหา" },
+    { group: G3, key: "allCat", label: "ปุ่มกรองแสดงทุกหมวด", def: "ทั้งหมด" },
+    { group: G3, key: "copy", label: "ปุ่มคัดลอกสคริปต์", def: "คัดลอกสคริปต์" },
+    { group: G3, key: "copied", label: "ข้อความหลังกดคัดลอก", def: "คัดลอกแล้ว" },
+    { group: G3, key: "count", label: "บรรทัดนับจำนวนสคริปต์", def: "แสดง {n} จาก {total} สคริปต์", note: "{n} คือจำนวนที่แสดงอยู่ {total} คือจำนวนทั้งหมด" },
+    { group: G3, key: "loading", label: "ข้อความตอนกำลังโหลด", def: "กำลังโหลดสคริปต์..." },
+    { group: G3, key: "empty", label: "ข้อความเมื่อค้นหาไม่เจอ", def: "ไม่พบสคริปต์ที่ตรงกับคำค้นหา" },
+    { group: G3, key: "emptyAll", label: "ข้อความเมื่อยังไม่มีสคริปต์ (สมาชิกเห็น)", def: "ยังไม่มีสคริปต์" },
+    { group: G3, key: "emptyAdmin", label: "ข้อความเมื่อยังไม่มีสคริปต์ (แอดมินเห็น)", def: "ยังไม่มีสคริปต์ กดเมนูแอดมินเพื่อเพิ่ม" },
+    { group: G3, key: "footer", label: "ข้อความท้ายหน้า", def: "อยากได้สคริปต์เพิ่มหรือพบสคริปต์ที่ใช้ไม่ได้ แจ้งแอดมินได้เลย", long: true, optional: true },
+
+    { group: G5, key: "contactTitle", label: "หัวข้อช่องทางการติดต่อ", def: "ช่องทางการติดต่อ", optional: true },
+    { group: G5, key: "contactHandle", label: "ชื่อผู้ใช้ Discord", def: "googye69" },
+    { group: G5, key: "contactHint", label: "ข้อความใต้ปุ่มติดต่อ", def: "กดเพื่อคัดลอกชื่อผู้ใช้", optional: true },
+    { group: G5, key: "contactCopied", label: "ข้อความหลังกดคัดลอกชื่อ", def: "คัดลอกชื่อผู้ใช้แล้ว" },
+
+    { group: G4, key: "errNoName", label: "ลืมกรอกชื่อ", def: "กรุณากรอกชื่อ" },
+    { group: G4, key: "errEmail", label: "อีเมลไม่ถูกต้อง", def: "อีเมลไม่ถูกต้อง ตัวอย่าง: name@gmail.com" },
+    { group: G4, key: "errPassShort", label: "รหัสผ่านสั้นเกินไป", def: "รหัสผ่านต้องมีอย่างน้อย 8 ตัวอักษร" },
+    { group: G4, key: "errPassMismatch", label: "รหัสผ่านสองช่องไม่ตรงกัน", def: "รหัสผ่านทั้งสองช่องไม่ตรงกัน" },
+    { group: G4, key: "errNameTaken", label: "ชื่อถูกใช้แล้ว", def: "ชื่อนี้มีคนใช้แล้ว ลองชื่ออื่น" },
+    { group: G4, key: "errEmailTaken", label: "อีเมลสมัครไว้แล้ว", def: "อีเมลนี้สมัครไว้แล้ว กดแท็บเข้าสู่ระบบได้เลย" },
+    { group: G4, key: "errLoginEmpty", label: "ลืมกรอกชื่อหรือรหัสผ่านตอนเข้าสู่ระบบ", def: "กรุณากรอกชื่อและรหัสผ่าน" },
+    { group: G4, key: "errLoginWrong", label: "ชื่อหรือรหัสผ่านผิด", def: "ชื่อหรือรหัสผ่านไม่ถูกต้อง" },
+    { group: G4, key: "msgSignupOk", label: "สมัครสำเร็จ (ต้องยืนยันอีเมล)", def: "สมัครสำเร็จ ส่งอีเมลยืนยันไปที่ {email} แล้ว กดลิงก์ในอีเมลก่อนเข้าสู่ระบบ", long: true, note: "{email} คืออีเมลที่ผู้สมัครกรอก" },
+    { group: G4, key: "msgSocialGo", label: "ตอนกำลังพาไปหน้า Google / Discord", def: "กำลังพาไปหน้า {provider}...", note: "{provider} คือ Google หรือ Discord" }
+  ];
+  var DEFAULT_TEXTS = {};
+  var TEXT_BY_KEY = {};
+  TEXT_FIELDS.forEach(function (f) { DEFAULT_TEXTS[f.key] = f.def; TEXT_BY_KEY[f.key] = f; });
+
+  var THEME_FIELDS = [
+    { key: "bg", label: "พื้นหลังเว็บ" },
+    { key: "surface", label: "พื้นการ์ดและฟอร์ม" },
+    { key: "line", label: "เส้นขอบ" },
+    { key: "fg", label: "ตัวอักษรหลัก" },
+    { key: "muted", label: "ตัวอักษรรอง" },
+    { key: "accent", label: "สีเด่น (ปุ่ม, ไฮไลต์)" },
+    { key: "accentInk", label: "ตัวอักษรบนปุ่ม" }
+  ];
+  var CSS_NAMES = {
+    bg: "--bg", surface: "--surface", line: "--line", fg: "--fg",
+    muted: "--muted", accent: "--accent", accentInk: "--accent-ink"
+  };
+  var PRESETS = [
+    { name: "ม่วงนีออน", theme: DEFAULT_THEME },
+    { name: "ฟ้าไซเบอร์", theme: { bg: "#060d14", surface: "#0e1a26", line: "#1b2c3d", fg: "#e6f1fb", muted: "#7f97ad", accent: "#22b8ff", accentInk: "#04141f" } },
+    { name: "เขียวมิ้นต์", theme: { bg: "#07100d", surface: "#0e1b16", line: "#1a2e26", fg: "#e6f6ee", muted: "#7fa395", accent: "#2de39a", accentInk: "#04150e" } },
+    { name: "ชมพูหวาน", theme: { bg: "#120810", surface: "#1e0f1a", line: "#341a2c", fg: "#fbe9f3", muted: "#a98398", accent: "#ff5ca8", accentInk: "#1f0613" } },
+    { name: "ส้มไฟ", theme: { bg: "#110a06", surface: "#1d130c", line: "#35220f", fg: "#fbeee3", muted: "#a58c78", accent: "#ff8a2b", accentInk: "#1a0c02" } },
+    { name: "สว่างสะอาด", theme: { bg: "#f6f4fb", surface: "#ffffff", line: "#e3dcf0", fg: "#1a1428", muted: "#6c6483", accent: "#7c3aed", accentInk: "#ffffff" } }
+  ];
+
+  function isHex(v) { return typeof v === "string" && /^#[0-9a-fA-F]{6}$/.test(v); }
+  function hexToRgb(h) { return [parseInt(h.slice(1, 3), 16), parseInt(h.slice(3, 5), 16), parseInt(h.slice(5, 7), 16)]; }
+  function rgba(h, a) { var c = hexToRgb(h); return "rgba(" + c[0] + "," + c[1] + "," + c[2] + "," + a + ")"; }
+  function lum(h) {
+    var c = hexToRgb(h).map(function (v) {
+      v = v / 255;
+      return v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4);
+    });
+    return 0.2126 * c[0] + 0.7152 * c[1] + 0.0722 * c[2];
+  }
+  function inkFor(h) { return lum(h) > 0.18 ? "#12061f" : "#ffffff"; }
+  function num(v, lo, hi, d) { v = Number(v); return isFinite(v) ? Math.min(hi, Math.max(lo, v)) : d; }
+  function bool(v, d) { return typeof v === "boolean" ? v : d; }
+
+  function cleanAnim(a) {
+    a = a || {};
+    var d = DEFAULT_ANIM;
+    var enters = ["none", "fade", "slide-up", "slide-down", "zoom", "blur"];
+    var clicks = ["none", "ripple", "press", "bounce", "pulse"];
+    return {
+      enter: enters.indexOf(a.enter) !== -1 ? a.enter : d.enter,
+      enterDur: num(a.enterDur, 0.1, 3, d.enterDur),
+      stagger: num(a.stagger, 0, 400, d.stagger),
+      glow: bool(a.glow, d.glow),
+      grid: bool(a.grid, d.grid),
+      gridDur: num(a.gridDur, 1, 30, d.gridDur),
+      click: clicks.indexOf(a.click) !== -1 ? a.click : d.click,
+      clickDur: num(a.clickDur, 0.1, 2, d.clickDur),
+      sheen: bool(a.sheen, d.sheen),
+      sheenDur: num(a.sheenDur, 1, 20, d.sheenDur),
+      hover: bool(a.hover, d.hover)
+    };
+  }
+  function mergeSettings(raw) {
+    raw = raw || {};
+    var t = clone(DEFAULT_THEME);
+    var rt = raw.theme || {};
+    THEME_FIELDS.forEach(function (f) { if (isHex(rt[f.key])) t[f.key] = rt[f.key]; });
+    var tx = {};
+    var rx = raw.texts || {};
+    TEXT_FIELDS.forEach(function (f) {
+      var v = rx[f.key];
+      var okVal = typeof v === "string" && v.length <= 600 && (v.trim() !== "" || f.optional);
+      tx[f.key] = okVal ? v : f.def;
+    });
+    return { theme: t, anim: cleanAnim(raw.anim), texts: tx };
+  }
+
+  // ดึงข้อความของเว็บ ({ชื่อ} ในข้อความจะถูกแทนด้วยค่าที่ส่งมา)
+  function T(key, vars) {
+    var f = TEXT_BY_KEY[key];
+    var v = settings && settings.texts ? settings.texts[key] : null;
+    if (typeof v !== "string" || (v.trim() === "" && !(f && f.optional))) v = DEFAULT_TEXTS[key] || "";
+    if (vars) Object.keys(vars).forEach(function (k) { v = v.split("{" + k + "}").join(vars[k]); });
+    return v;
+  }
+  function applyTexts() {
+    Array.prototype.forEach.call(document.querySelectorAll("[data-t]"), function (el) {
+      el.textContent = T(el.getAttribute("data-t"));
+    });
+    Array.prototype.forEach.call(document.querySelectorAll("[data-ph]"), function (el) {
+      el.setAttribute("placeholder", T(el.getAttribute("data-ph")));
+    });
+    document.title = T("titleA") + T("titleB");
+    if (!appEl.hidden) { renderChips(); renderCards(); }
+  }
+
+  function applyTheme(t) {
+    var root = document.documentElement;
+    THEME_FIELDS.forEach(function (f) {
+      var v = isHex(t[f.key]) ? t[f.key] : DEFAULT_THEME[f.key];
+      root.style.setProperty(CSS_NAMES[f.key], v);
+    });
+    var accent = isHex(t.accent) ? t.accent : DEFAULT_THEME.accent;
+    var dark = lum(isHex(t.bg) ? t.bg : DEFAULT_THEME.bg) < 0.4;
+    root.style.colorScheme = dark ? "dark" : "light";
+    root.style.setProperty("--danger", dark ? "#ff7a8a" : "#c2263f");
+    root.style.setProperty("--sheen-soft", rgba(accent, 0.22));
+    root.style.setProperty("--glow-a", rgba(accent, 0.22));
+    root.style.setProperty("--glow-b", rgba(accent, 0.14));
+    root.style.setProperty("--lift", rgba(accent, 0.35));
+    root.style.setProperty("--accent-soft", rgba(accent, 0.55));
+    root.style.setProperty("--ring", rgba(accent, 0.2));
+    root.style.setProperty("--grid-line", rgba(accent, dark ? 0.11 : 0.14));
+  }
+  function applyAnim(a) {
+    var root = document.documentElement;
+    root.setAttribute("data-enter", a.enter);
+    root.setAttribute("data-glow", a.glow ? "on" : "off");
+    root.setAttribute("data-grid", a.grid ? "on" : "off");
+    root.style.setProperty("--grid-dur", a.gridDur + "s");
+    root.setAttribute("data-sheen", a.sheen ? "on" : "off");
+    root.setAttribute("data-hover", a.hover ? "on" : "off");
+    root.setAttribute("data-click", a.click);
+    root.style.setProperty("--enter-dur", a.enterDur + "s");
+    root.style.setProperty("--stagger", a.stagger + "ms");
+    root.style.setProperty("--sheen-dur", a.sheenDur + "s");
+    root.style.setProperty("--click-dur", a.clickDur + "s");
+  }
+  function applyAll(s) { applyTheme(s.theme); applyAnim(s.anim); applyTexts(); }
+
+  var settings = mergeSettings(null);
+  var savedSettings = clone(settings);
+
+  // ---------- เอฟเฟกต์ตอนกดปุ่ม ----------
+  document.addEventListener("pointerdown", function (e) {
+    var btn = e.target && e.target.closest ? e.target.closest("button") : null;
+    if (!btn || btn.disabled) return;
+    var kind = document.documentElement.getAttribute("data-click");
+    if (!kind || kind === "none") return;
+    if (kind === "ripple") {
+      var r = btn.getBoundingClientRect();
+      var size = Math.max(r.width, r.height) * 2;
+      var s = document.createElement("span");
+      s.className = "ripple";
+      s.style.width = size + "px";
+      s.style.height = size + "px";
+      s.style.left = (e.clientX - r.left - size / 2) + "px";
+      s.style.top = (e.clientY - r.top - size / 2) + "px";
+      btn.appendChild(s);
+      setTimeout(function () { if (s.parentNode) s.parentNode.removeChild(s); }, 1500);
+      return;
+    }
+    var cls = "fx-" + kind;
+    btn.classList.remove(cls);
+    void btn.offsetWidth;
+    btn.classList.add(cls);
+    setTimeout(function () { btn.classList.remove(cls); }, 1500);
+  }, true);
+
+  // =====================================================================
+  //  คลังสคริปต์
+  // =====================================================================
+  var SCRIPTS = [];
+  var isAdminUser = false;
+  var ALL = "\u0001all"; // ค่าภายในของปุ่ม "ทั้งหมด" (ข้อความที่แสดงแก้ได้ในเมนูแอดมิน)
+  var state = { cat: ALL, q: "" };
+  var authEl = document.getElementById("auth");
+  var appEl = document.getElementById("app");
+  var adminEl = document.getElementById("admin");
+  var grid = document.getElementById("grid");
+  var chipsEl = document.getElementById("chips");
+  var countEl = document.getElementById("count");
+  var input = document.getElementById("q");
+  var adminOpen = document.getElementById("admin-open");
+
+  function cats() {
+    var list = [ALL];
+    SCRIPTS.forEach(function (s) { if (list.indexOf(s.cat) === -1) list.push(s.cat); });
+    return list;
+  }
+
+  function renderChips() {
+    if (cats().indexOf(state.cat) === -1) state.cat = ALL;
+    chipsEl.textContent = "";
+    cats().forEach(function (c) {
+      var b = document.createElement("button");
+      b.type = "button";
+      b.className = "chip";
+      b.textContent = c === ALL ? T("allCat") : c;
+      b.setAttribute("aria-pressed", String(state.cat === c));
+      b.addEventListener("click", function () { state.cat = c; renderChips(); renderCards(true); });
+      chipsEl.appendChild(b);
+    });
+  }
+
+  function copyText(text, pre, btn) {
+    function done() {
+      btn.textContent = T("copied");
+      btn.classList.add("done");
+      setTimeout(function () { btn.textContent = T("copy"); btn.classList.remove("done"); }, 1800);
+    }
+    function fallback() {
+      var range = document.createRange();
+      range.selectNodeContents(pre);
+      var sel = window.getSelection();
+      sel.removeAllRanges();
+      sel.addRange(range);
+      try { if (document.execCommand("copy")) { done(); return; } } catch (e) {}
+      btn.textContent = "เลือกโค้ดแล้ว กด Ctrl+C";
+    }
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(done, fallback);
+    } else {
+      fallback();
+    }
+  }
+
+  function card(s) {
+    var el = document.createElement("article");
+    el.className = "card";
+
+    var top = document.createElement("div");
+    top.className = "card-top";
+    var t = document.createElement("div");
+    t.className = "card-title";
+    var h = document.createElement("h2");
+    h.textContent = s.title;
+    var p = document.createElement("p");
+    p.textContent = s.desc;
+    t.appendChild(h);
+    if (s.desc) t.appendChild(p);
+    var tag = document.createElement("span");
+    tag.className = "tag";
+    tag.textContent = s.lang;
+    top.appendChild(t);
+    top.appendChild(tag);
+
+    var box = document.createElement("div");
+    box.className = "code-box";
+    box.tabIndex = 0;
+    var pre = document.createElement("pre");
+    var code = document.createElement("code");
+    code.textContent = s.code;
+    pre.appendChild(code);
+    box.appendChild(pre);
+
+    var btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = "copy";
+    btn.textContent = T("copy");
+    btn.addEventListener("click", function () { copyText(s.code, pre, btn); });
+
+    el.appendChild(top);
+    el.appendChild(box);
+    el.appendChild(btn);
+    return el;
+  }
+
+  function renderCards(animate) {
+    var q = state.q.trim().toLowerCase();
+    var list = SCRIPTS.filter(function (s) {
+      if (state.cat !== ALL && s.cat !== state.cat) return false;
+      if (!q) return true;
+      return (s.title + " " + s.desc + " " + s.cat + " " + s.lang).toLowerCase().indexOf(q) !== -1;
+    });
+    grid.textContent = "";
+    list.forEach(function (s, i) {
+      var c = card(s);
+      c.style.setProperty("--i", String(i));
+      if (animate) c.classList.add("enter");
+      grid.appendChild(c);
+    });
+    if (!list.length) {
+      var e = document.createElement("div");
+      e.className = "empty";
+      e.textContent = SCRIPTS.length ? T("empty") : T(isAdminUser ? "emptyAdmin" : "emptyAll");
+      grid.appendChild(e);
+    }
+    countEl.textContent = T("count", { n: list.length, total: SCRIPTS.length });
+  }
+
+  input.addEventListener("input", function () { state.q = input.value; renderCards(); });
+  document.getElementById("search-form").addEventListener("submit", function (e) {
+    e.preventDefault();
+    state.q = input.value;
+    renderCards(true);
+  });
+
+  // ปุ่มติดต่อ: กดเพื่อคัดลอกชื่อ Discord (ลิงก์เปิดแอปใช้ไม่ได้ในหน้านี้ จึงให้คัดลอกชื่อแทน)
+  function copyPlain(text, ok, fail) {
+    function fallback() {
+      var ta = document.createElement("textarea");
+      ta.value = text;
+      ta.setAttribute("readonly", "");
+      ta.style.position = "fixed";
+      ta.style.opacity = "0";
+      document.body.appendChild(ta);
+      ta.select();
+      var done = false;
+      try { done = document.execCommand("copy"); } catch (e) {}
+      document.body.removeChild(ta);
+      if (done) ok(); else fail();
+    }
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(ok, fallback);
+    } else {
+      fallback();
+    }
+  }
+  Array.prototype.forEach.call(document.querySelectorAll("[data-contact]"), function (btn) {
+    var hint = btn.parentNode.querySelector(".contact-hint");
+    var timer = null;
+    function flash(msg) {
+      hint.textContent = msg;
+      clearTimeout(timer);
+      timer = setTimeout(function () { hint.textContent = T("contactHint"); }, 2200);
+    }
+    btn.addEventListener("click", function () {
+      var handle = T("contactHandle");
+      copyPlain(handle, function () { flash(T("contactCopied")); }, function () { flash(handle); });
+    });
+  });
+
+  function loadScripts() {
+    countEl.textContent = T("loading");
+    Data.listScripts().then(function (list) {
+      SCRIPTS = list;
+      renderChips();
+      renderCards(true);
+      renderAdminList();
+    }, function () {
+      grid.textContent = "";
+      var e = document.createElement("div");
+      e.className = "empty";
+      e.textContent = "โหลดสคริปต์ไม่สำเร็จ ลองรีเฟรชหน้านี้ (ถ้าเป็นแอดมิน ตรวจว่ารัน setup.sql แล้ว)";
+      grid.appendChild(e);
+      countEl.textContent = "";
+    });
+  }
+
+  // เรียกจากส่วนสมัคร/เข้าสู่ระบบ
+  function afterEnter() {
+    loadScripts();
+    Data.isAdmin().then(function (yes) {
+      isAdminUser = !!yes;
+      adminOpen.hidden = !isAdminUser;
+      renderCards();
+    }, noop);
+  }
+  function afterLeave() {
+    isAdminUser = false;
+    adminOpen.hidden = true;
+    SCRIPTS = [];
+    grid.textContent = "";
+    chipsEl.textContent = "";
+    countEl.textContent = "";
+  }
+
+  // =====================================================================
+  //  เมนูแอดมิน
+  // =====================================================================
+  function explain(err) {
+    var m = String((err && err.message) || "");
+    if ((err && err.code === "42501") || /row-level|permission|not allowed/i.test(m)) {
+      return "บัญชีนี้ไม่ได้เป็นแอดมิน (ดูขั้นตอนตั้งแอดมินใน README)";
+    }
+    return m || "ไม่ทราบสาเหตุ";
+  }
+
+  // ----- แท็บ -----
+  Array.prototype.forEach.call(document.querySelectorAll(".admin-tabs .tab"), function (tab) {
+    tab.addEventListener("click", function () {
+      Array.prototype.forEach.call(document.querySelectorAll(".admin-tabs .tab"), function (t) {
+        var on = t === tab;
+        t.setAttribute("aria-selected", String(on));
+        document.getElementById(t.getAttribute("data-panel")).hidden = !on;
+      });
+    });
+  });
+
+  adminOpen.addEventListener("click", function () {
+    if (!isAdminUser) return;
+    appEl.hidden = true;
+    adminEl.hidden = false;
+    window.scrollTo(0, 0);
+    renderAdminList();
+    syncColorInputs();
+    syncAnimControls();
+    syncTextInputs();
+  });
+  document.getElementById("admin-back").addEventListener("click", function () {
+    settings = clone(savedSettings); // ทิ้งการเปลี่ยนแปลงที่ยังไม่บันทึก
+    adminEl.hidden = true;
+    appEl.hidden = false;
+    applyAll(settings); // ทำหลังแสดงหน้าคลัง เพื่อให้การ์ดและปุ่มกรองวาดใหม่ด้วยข้อความล่าสุด
+    window.scrollTo(0, 0);
+  });
+
+  function persist(msgEl) {
+    msgEl.textContent = "กำลังบันทึก...";
+    Data.saveSettings(settings).then(function () {
+      savedSettings = clone(settings);
+      save("hub_cache", settings);
+      msgEl.textContent = "บันทึกแล้ว ทุกคนจะเห็นการเปลี่ยนแปลงนี้";
+    }, function (err) {
+      msgEl.textContent = "บันทึกไม่สำเร็จ: " + explain(err);
+    });
+  }
+
+  // ----- ธีมสี -----
+  var themeMsg = document.getElementById("theme-msg");
+  var colorGrid = document.getElementById("color-grid");
+  var presetsEl = document.getElementById("presets");
+
+  function buildColorGrid() {
+    THEME_FIELDS.forEach(function (f) {
+      var row = document.createElement("label");
+      row.className = "color-row";
+      var name = document.createElement("span");
+      name.className = "name";
+      name.textContent = f.label;
+      var inp = document.createElement("input");
+      inp.type = "color";
+      inp.id = "c-" + f.key;
+      var code = document.createElement("code");
+      code.id = "h-" + f.key;
+      inp.addEventListener("input", function () {
+        settings.theme[f.key] = inp.value;
+        if (f.key === "accent") settings.theme.accentInk = inkFor(inp.value);
+        applyTheme(settings.theme);
+        syncColorInputs();
+        themeMsg.textContent = "ยังไม่ได้บันทึก";
+      });
+      row.appendChild(name);
+      row.appendChild(inp);
+      row.appendChild(code);
+      colorGrid.appendChild(row);
+    });
+    PRESETS.forEach(function (p) {
+      var b = document.createElement("button");
+      b.type = "button";
+      b.className = "chip";
+      b.textContent = p.name;
+      b.addEventListener("click", function () {
+        settings.theme = clone(p.theme);
+        applyTheme(settings.theme);
+        syncColorInputs();
+        themeMsg.textContent = "ยังไม่ได้บันทึก";
+      });
+      presetsEl.appendChild(b);
+    });
+  }
+  function syncColorInputs() {
+    THEME_FIELDS.forEach(function (f) {
+      var v = settings.theme[f.key];
+      document.getElementById("c-" + f.key).value = v;
+      document.getElementById("h-" + f.key).textContent = v;
+    });
+  }
+  document.getElementById("theme-save").addEventListener("click", function () { persist(themeMsg); });
+  document.getElementById("theme-reset").addEventListener("click", function () {
+    settings.theme = clone(DEFAULT_THEME);
+    applyTheme(settings.theme);
+    syncColorInputs();
+    themeMsg.textContent = "คืนค่าเริ่มต้นแล้ว กดบันทึกเพื่อใช้งานจริง";
+  });
+
+  // ----- อนิเมชัน -----
+  var animMsg = document.getElementById("anim-msg");
+  var A = {
+    enter: document.getElementById("a-enter"),
+    enterDur: document.getElementById("a-enter-dur"),
+    stagger: document.getElementById("a-stagger"),
+    glow: document.getElementById("a-glow"),
+    grid: document.getElementById("a-grid"),
+    gridDur: document.getElementById("a-grid-dur"),
+    click: document.getElementById("a-click"),
+    clickDur: document.getElementById("a-click-dur"),
+    sheen: document.getElementById("a-sheen"),
+    sheenDur: document.getElementById("a-sheen-dur"),
+    hover: document.getElementById("a-hover")
+  };
+  function syncAnimControls() {
+    var a = settings.anim;
+    A.enter.value = a.enter;
+    A.enterDur.value = a.enterDur;
+    A.stagger.value = a.stagger;
+    A.glow.checked = a.glow;
+    A.grid.checked = a.grid;
+    A.gridDur.value = a.gridDur;
+    A.click.value = a.click;
+    A.clickDur.value = a.clickDur;
+    A.sheen.checked = a.sheen;
+    A.sheenDur.value = a.sheenDur;
+    A.hover.checked = a.hover;
+    document.getElementById("o-enter-dur").textContent = a.enterDur + " วิ";
+    document.getElementById("o-stagger").textContent = a.stagger + " มิลลิวิ";
+    document.getElementById("o-grid-dur").textContent = a.gridDur + " วิ";
+    document.getElementById("o-click-dur").textContent = a.clickDur + " วิ";
+    document.getElementById("o-sheen-dur").textContent = a.sheenDur + " วิ";
+  }
+  function readAnimControls() {
+    settings.anim = cleanAnim({
+      enter: A.enter.value, enterDur: A.enterDur.value, stagger: A.stagger.value, glow: A.glow.checked,
+      grid: A.grid.checked, gridDur: A.gridDur.value,
+      click: A.click.value, clickDur: A.clickDur.value, sheen: A.sheen.checked,
+      sheenDur: A.sheenDur.value, hover: A.hover.checked
+    });
+    applyAnim(settings.anim);
+    syncAnimControls();
+    animMsg.textContent = "ยังไม่ได้บันทึก";
+  }
+  Object.keys(A).forEach(function (k) {
+    A[k].addEventListener(A[k].type === "range" ? "input" : "change", readAnimControls);
+  });
+  document.getElementById("anim-save").addEventListener("click", function () { persist(animMsg); });
+  document.getElementById("anim-reset").addEventListener("click", function () {
+    settings.anim = clone(DEFAULT_ANIM);
+    applyAnim(settings.anim);
+    syncAnimControls();
+    animMsg.textContent = "คืนค่าเริ่มต้นแล้ว กดบันทึกเพื่อใช้งานจริง";
+  });
+  document.getElementById("replay").addEventListener("click", function () {
+    adminEl.hidden = true;
+    void adminEl.offsetWidth;
+    adminEl.hidden = false;
+  });
+
+  // ----- ข้อความเว็บ -----
+  var textsMsg = document.getElementById("texts-msg");
+  var textsBox = document.getElementById("texts-box");
+  function buildTextEditor() {
+    var group = null, wrap = null;
+    TEXT_FIELDS.forEach(function (f) {
+      if (f.group !== group) {
+        group = f.group;
+        wrap = document.createElement("div");
+        wrap.className = "group";
+        var h = document.createElement("h3");
+        h.textContent = group;
+        wrap.appendChild(h);
+        textsBox.appendChild(wrap);
+      }
+      var field = document.createElement("div");
+      field.className = "field";
+      var lab = document.createElement("label");
+      lab.setAttribute("for", "t-" + f.key);
+      lab.textContent = f.label;
+      var el = document.createElement(f.long ? "textarea" : "input");
+      el.id = "t-" + f.key;
+      if (f.long) { el.className = "short"; el.spellcheck = false; } else { el.type = "text"; }
+      el.autocomplete = "off";
+      el.maxLength = 600;
+      el.addEventListener("input", function () {
+        settings.texts[f.key] = el.value;
+        applyTexts();
+        textsMsg.textContent = "ยังไม่ได้บันทึก";
+      });
+      field.appendChild(lab);
+      field.appendChild(el);
+      if (f.note) {
+        var n = document.createElement("span");
+        n.className = "note";
+        n.textContent = f.note;
+        field.appendChild(n);
+      }
+      wrap.appendChild(field);
+    });
+  }
+  function syncTextInputs() {
+    TEXT_FIELDS.forEach(function (f) {
+      var el = document.getElementById("t-" + f.key);
+      if (el && settings.texts) el.value = settings.texts[f.key];
+    });
+  }
+  document.getElementById("texts-save").addEventListener("click", function () { persist(textsMsg); });
+  document.getElementById("texts-reset").addEventListener("click", function () {
+    settings.texts = clone(DEFAULT_TEXTS);
+    syncTextInputs();
+    applyTexts();
+    textsMsg.textContent = "คืนข้อความเริ่มต้นแล้ว กดบันทึกเพื่อใช้งานจริง";
+  });
+
+  // ----- จัดการสคริปต์ -----
+  var editingId = null;
+  var fTitle = document.getElementById("s-title");
+  var fDesc = document.getElementById("s-desc");
+  var fCat = document.getElementById("s-cat");
+  var fLang = document.getElementById("s-lang");
+  var fCode = document.getElementById("s-code");
+  var sErr = document.getElementById("s-err");
+  var sSave = document.getElementById("s-save");
+  var sCancel = document.getElementById("s-cancel");
+  var sHeading = document.getElementById("s-heading");
+  var formScript = document.getElementById("form-script");
+  var adList = document.getElementById("ad-list");
+
+  function say(el, text, ok) { el.textContent = text; el.classList.toggle("ok", !!ok); }
+
+  function resetScriptForm() {
+    editingId = null;
+    fTitle.value = ""; fDesc.value = ""; fCat.value = ""; fLang.value = ""; fCode.value = "";
+    sSave.textContent = "เพิ่มสคริปต์";
+    sHeading.textContent = "เพิ่มสคริปต์";
+    sCancel.hidden = true;
+  }
+  sCancel.addEventListener("click", function () { resetScriptForm(); say(sErr, ""); });
+
+  formScript.addEventListener("submit", function (e) {
+    e.preventDefault();
+    var item = {
+      id: editingId,
+      title: fTitle.value.trim(),
+      desc: fDesc.value.trim(),
+      cat: fCat.value.trim() || "อื่นๆ",
+      lang: fLang.value.trim() || "Text",
+      code: fCode.value.replace(/\r/g, "")
+    };
+    if (!item.title) { say(sErr, "กรุณากรอกชื่อสคริปต์"); return; }
+    if (!item.code.trim()) { say(sErr, "กรุณาใส่โค้ดสคริปต์"); return; }
+    say(sErr, "");
+    sSave.disabled = true;
+    var wasEditing = !!editingId;
+    Data.saveScript(item).then(function (saved) {
+      sSave.disabled = false;
+      if (wasEditing) {
+        SCRIPTS = SCRIPTS.map(function (s) { return s.id === saved.id ? saved : s; });
+      } else {
+        SCRIPTS.push(saved);
+      }
+      resetScriptForm();
+      renderChips(); renderCards(); renderAdminList();
+      say(sErr, wasEditing ? "บันทึกการแก้ไขแล้ว" : "เพิ่มสคริปต์แล้ว", true);
+    }, function (err) {
+      sSave.disabled = false;
+      say(sErr, "บันทึกไม่สำเร็จ: " + explain(err));
+    });
+  });
+
+  function renderAdminList() {
+    adList.textContent = "";
+    document.getElementById("s-count").textContent = "(" + SCRIPTS.length + ")";
+    var dl = document.getElementById("cat-list");
+    dl.textContent = "";
+    cats().slice(1).forEach(function (c) {
+      var o = document.createElement("option");
+      o.value = c;
+      dl.appendChild(o);
+    });
+    if (!SCRIPTS.length) {
+      var empty = document.createElement("p");
+      empty.className = "hint";
+      empty.textContent = "ยังไม่มีสคริปต์ เพิ่มจากฟอร์มด้านบนได้เลย";
+      adList.appendChild(empty);
+      return;
+    }
+    SCRIPTS.forEach(function (s) {
+      var row = document.createElement("div");
+      row.className = "admin-item";
+      var meta = document.createElement("div");
+      meta.className = "meta";
+      var strong = document.createElement("strong");
+      strong.textContent = s.title;
+      var small = document.createElement("small");
+      small.textContent = s.cat + " · " + s.lang;
+      meta.appendChild(strong);
+      meta.appendChild(small);
+
+      var acts = document.createElement("div");
+      acts.className = "acts";
+      var edit = document.createElement("button");
+      edit.type = "button";
+      edit.className = "ghost small";
+      edit.textContent = "แก้ไข";
+      edit.addEventListener("click", function () {
+        editingId = s.id;
+        fTitle.value = s.title; fDesc.value = s.desc; fCat.value = s.cat; fLang.value = s.lang; fCode.value = s.code;
+        sSave.textContent = "บันทึกการแก้ไข";
+        sHeading.textContent = "แก้ไขสคริปต์";
+        sCancel.hidden = false;
+        say(sErr, "");
+        formScript.scrollIntoView({ behavior: "smooth", block: "start" });
+      });
+      var del = document.createElement("button");
+      del.type = "button";
+      del.className = "ghost small danger";
+      del.textContent = "ลบ";
+      var timer = null;
+      del.addEventListener("click", function () {
+        if (!del.classList.contains("armed")) {
+          del.classList.add("armed");
+          del.textContent = "กดอีกครั้งเพื่อลบ";
+          timer = setTimeout(function () { del.classList.remove("armed"); del.textContent = "ลบ"; }, 3000);
+          return;
+        }
+        clearTimeout(timer);
+        del.disabled = true;
+        Data.deleteScript(s.id).then(function () {
+          SCRIPTS = SCRIPTS.filter(function (x) { return x.id !== s.id; });
+          if (editingId === s.id) resetScriptForm();
+          renderChips(); renderCards(); renderAdminList();
+        }, function (err) {
+          del.disabled = false;
+          del.classList.remove("armed");
+          del.textContent = "ลบ";
+          say(sErr, "ลบไม่สำเร็จ: " + explain(err));
+        });
+      });
+      acts.appendChild(edit);
+      acts.appendChild(del);
+      row.appendChild(meta);
+      row.appendChild(acts);
+      adList.appendChild(row);
+    });
+  }
+
+  buildColorGrid();
+  buildTextEditor();
+
+  // ---------- ที่เก็บข้อมูล (หน้าตัวอย่าง: เก็บในเบราว์เซอร์ของแต่ละคน) ----------
+  var DEFAULT_SCRIPTS = [
+    {
+      title: "Tween ย้ายพาร์ทขึ้นฟ้า",
+      desc: "ใช้ TweenService ยกพาร์ทขึ้น 10 studs แบบนุ่มนวลใน 2 วินาที",
+      cat: "Roblox",
+      lang: "Lua",
+      code: 'local TweenService = game:GetService("TweenService")\n\nlocal part = workspace:WaitForChild("Part")\nlocal info = TweenInfo.new(2, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)\nlocal goal = { Position = part.Position + Vector3.new(0, 10, 0) }\n\nTweenService:Create(part, info, goal):Play()'
+    },
+    {
+      title: "พาร์ทอันตราย (Kill Brick)",
+      desc: "วางไว้ใน Part ผู้เล่นที่สัมผัสจะเลือดหมดทันที",
+      cat: "Roblox",
+      lang: "Lua",
+      code: 'local part = script.Parent\n\npart.Touched:Connect(function(hit)\n\tlocal humanoid = hit.Parent:FindFirstChildOfClass("Humanoid")\n\tif humanoid then\n\t\thumanoid.Health = 0\n\tend\nend)'
+    },
+    {
+      title: "ข้อความต้อนรับผู้เล่น",
+      desc: "ส่งข้อความทักทายเมื่อผู้เล่นเข้าโลกครั้งแรก",
+      cat: "Minecraft",
+      lang: "JavaScript",
+      code: 'import { world } from "@minecraft/server";\n\nworld.afterEvents.playerSpawn.subscribe((event) => {\n  if (event.initialSpawn) {\n    event.player.sendMessage("§dยินดีต้อนรับสู่เซิร์ฟเวอร์!");\n  }\n});'
+    },
+    {
+      title: "แจกไอเทมเมื่อเข้าโลก",
+      desc: "ให้ขนมปัง 16 ชิ้นกับผู้เล่นที่เข้าโลกครั้งแรก",
+      cat: "Minecraft",
+      lang: "JavaScript",
+      code: 'import { world, ItemStack } from "@minecraft/server";\n\nworld.afterEvents.playerSpawn.subscribe((event) => {\n  if (!event.initialSpawn) return;\n  const inventory = event.player.getComponent("minecraft:inventory").container;\n  inventory.addItem(new ItemStack("minecraft:bread", 16));\n});'
+    },
+    {
+      title: "ตัวจับเวลาถอยหลัง",
+      desc: "นับถอยหลังจากจำนวนวินาทีที่กำหนด แสดงผลในคอนโซล",
+      cat: "อื่นๆ",
+      lang: "JavaScript",
+      code: 'function countdown(seconds) {\n  const timer = setInterval(() => {\n    console.log(seconds);\n    seconds -= 1;\n    if (seconds < 0) {\n      clearInterval(timer);\n      console.log("หมดเวลา!");\n    }\n  }, 1000);\n}\n\ncountdown(10);'
+    }
+  ];
+  function newId() { return "s" + Date.now().toString(36) + Math.random().toString(36).slice(2, 6); }
+
+  var Data = {
+    getSettings: function () { return Promise.resolve(load("hub_settings")); },
+    saveSettings: function (s) { save("hub_settings", s); return Promise.resolve(); },
+    listScripts: function () {
+      var list = load("hub_scripts");
+      if (!list) {
+        list = DEFAULT_SCRIPTS.map(function (s) { var c = clone(s); c.id = newId(); return c; });
+        save("hub_scripts", list);
+      }
+      return Promise.resolve(list);
+    },
+    saveScript: function (it) {
+      var list = load("hub_scripts") || [];
+      var out;
+      if (it.id) {
+        list = list.map(function (s) { if (s.id === it.id) { out = clone(it); return out; } return s; });
+      } else {
+        out = clone(it);
+        out.id = newId();
+        list.push(out);
+      }
+      save("hub_scripts", list);
+      return Promise.resolve(out);
+    },
+    deleteScript: function (id) {
+      save("hub_scripts", (load("hub_scripts") || []).filter(function (s) { return s.id !== id; }));
+      return Promise.resolve();
+    },
+    // หน้าตัวอย่าง: บัญชีที่ชื่อ Tutvsp เป็นแอดมิน
+    isAdmin: function () {
+      var users = load("hub_users") || {};
+      var u = users[load("hub_session")];
+      return Promise.resolve(!!u && String(u.name).toLowerCase() === "tutvsp");
+    }
+  };
+
+  // ---------- สมัคร / เข้าสู่ระบบ (หน้าตัวอย่าง: บัญชีเก็บในเบราว์เซอร์) ----------
+  function toHex(buf) {
+    return Array.prototype.map.call(new Uint8Array(buf), function (b) { return ("0" + b.toString(16)).slice(-2); }).join("");
+  }
+  function sha(text) {
+    return crypto.subtle.digest("SHA-256", new TextEncoder().encode(text)).then(toHex);
+  }
+  function randSalt() {
+    var a = new Uint8Array(16);
+    crypto.getRandomValues(a);
+    return toHex(a);
+  }
+
+  var userNameEl = document.getElementById("user-name");
+  var tabSignup = document.getElementById("tab-signup");
+  var tabLogin = document.getElementById("tab-login");
+  var panelSignup = document.getElementById("panel-signup");
+  var panelLogin = document.getElementById("panel-login");
+  var errSignup = document.getElementById("err-signup");
+  var errLogin = document.getElementById("err-login");
+  var notice = document.getElementById("notice");
+
+  function showTab(which) {
+    var signup = which === "signup";
+    tabSignup.setAttribute("aria-selected", String(signup));
+    tabLogin.setAttribute("aria-selected", String(!signup));
+    panelSignup.hidden = !signup;
+    panelLogin.hidden = signup;
+    errSignup.textContent = "";
+    errLogin.textContent = "";
+    notice.textContent = "";
+  }
+  tabSignup.addEventListener("click", function () { showTab("signup"); });
+  tabLogin.addEventListener("click", function () { showTab("login"); });
+
+  function showAuth() {
+    appEl.hidden = true;
+    adminEl.hidden = true;
+    authEl.hidden = false;
+    afterLeave();
+  }
+  function enter(name) {
+    userNameEl.textContent = name;
+    if (!appEl.hidden || !adminEl.hidden) return;
+    authEl.hidden = true;
+    appEl.hidden = false;
+    window.scrollTo(0, 0);
+    afterEnter();
+  }
+
+  function cryptoError() { return "เบราว์เซอร์นี้ไม่รองรับการเข้ารหัสรหัสผ่าน ลองใช้เบราว์เซอร์อื่น"; }
+
+  document.getElementById("form-signup").addEventListener("submit", function (e) {
+    e.preventDefault();
+    var name = document.getElementById("su-name").value.trim();
+    var email = document.getElementById("su-email").value.trim().toLowerCase();
+    var pw = document.getElementById("su-pass").value;
+    var pw2 = document.getElementById("su-pass2").value;
+    errSignup.textContent = "";
+
+    if (!name) { errSignup.textContent = T("errNoName"); return; }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { errSignup.textContent = T("errEmail"); return; }
+    if (pw.length < 8) { errSignup.textContent = T("errPassShort"); return; }
+    if (pw !== pw2) { errSignup.textContent = T("errPassMismatch"); return; }
+
+    var users = load("hub_users") || {};
+    if (users[email]) { errSignup.textContent = T("errEmailTaken"); return; }
+    var nameTaken = Object.keys(users).some(function (k) {
+      return String(users[k].name).toLowerCase() === name.toLowerCase();
+    });
+    if (nameTaken) { errSignup.textContent = T("errNameTaken"); return; }
+
+    var salt;
+    try { salt = randSalt(); } catch (err) { errSignup.textContent = cryptoError(); return; }
+    var hashed;
+    try { hashed = sha(salt + pw); } catch (err2) { errSignup.textContent = cryptoError(); return; }
+    hashed.then(function (h) {
+      users[email] = { name: name, salt: salt, hash: h };
+      save("hub_users", users);
+      save("hub_session", email);
+      enter(name);
+    }, function () { errSignup.textContent = cryptoError(); });
+  });
+
+  document.getElementById("form-login").addEventListener("submit", function (e) {
+    e.preventDefault();
+    var name = document.getElementById("li-name").value.trim().toLowerCase();
+    var pw = document.getElementById("li-pass").value;
+    errLogin.textContent = "";
+    if (!name || !pw) { errLogin.textContent = T("errLoginEmpty"); return; }
+
+    var users = load("hub_users") || {};
+    var email = null;
+    Object.keys(users).forEach(function (k) {
+      if (String(users[k].name).toLowerCase() === name) { email = k; }
+    });
+    var user = email ? users[email] : null;
+    if (!user) { errLogin.textContent = T("errLoginWrong"); return; }
+
+    var hashed;
+    try { hashed = sha(user.salt + pw); } catch (err) { errLogin.textContent = cryptoError(); return; }
+    hashed.then(function (h) {
+      if (h !== user.hash) { errLogin.textContent = T("errLoginWrong"); return; }
+      save("hub_session", email);
+      enter(user.name);
+    }, function () { errLogin.textContent = cryptoError(); });
+  });
+
+  Array.prototype.forEach.call(document.querySelectorAll(".social"), function (b) {
+    b.addEventListener("click", function () {
+      notice.textContent = "การเข้าสู่ระบบด้วย " + b.getAttribute("data-provider") + " ยังใช้งานไม่ได้ ต้องเชื่อมต่อกับระบบหลังบ้านก่อน ตอนนี้สมัครด้วยอีเมลได้เลย";
+    });
+  });
+
+  document.getElementById("logout").addEventListener("click", function () {
+    drop("hub_session");
+    document.getElementById("li-pass").value = "";
+    showAuth();
+    showTab("login");
+    window.scrollTo(0, 0);
+  });
+
+  (function boot() {
+    var session = load("hub_session");
+    var users = load("hub_users");
+    if (session && users && users[session]) { enter(users[session].name); }
+  })();
+
+  // ---------- เริ่มต้น: ใช้ค่าที่จำไว้ก่อน แล้วดึงค่าล่าสุดจากที่เก็บข้อมูล ----------
+  (function startup() {
+    var cached = load("hub_cache");
+    if (cached) { settings = mergeSettings(cached); savedSettings = clone(settings); }
+    applyAll(settings);
+    Data.getSettings().then(function (raw) {
+      if (!raw) return;
+      settings = mergeSettings(raw);
+      savedSettings = clone(settings);
+      save("hub_cache", settings);
+      applyAll(settings);
+      if (!adminEl.hidden) { syncColorInputs(); syncAnimControls(); syncTextInputs(); }
+    }, noop);
+  })();
+</script>
+
+</body></html>
